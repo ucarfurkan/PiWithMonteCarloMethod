@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Square with Circle and Random Points</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        #square {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 50px auto;
+            border: 2px solid black;
+        }
+
+        #circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            padding-bottom: 50%;
+            background-color: white;
+            border: 2px solid black;
+        }
+
+        .point {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        #counter {
+            position: relative;
+            width: 300px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="square">
+        <div id="circle"></div>
+    </div>
+    <div id="counter">
+        <p>Points created: <span id="total"></span></p>
+        <p>Points in circle: <span id="inside"></span></p>
+    </div>
+    <script>
+        let total = 0;
+        let inside = 0;
+        const square = document.getElementById('square');
+        const circle = document.getElementById('circle');
+        const totalSpan = document.getElementById('total');
+        const insideSpan = document.getElementById('inside');
+        let intervalId;
+
+        function updateCounter() {
+            totalSpan.innerText = total;
+            insideSpan.innerText = inside;
+        }
+
+        function createPoint() {
+            if (total === 1000) {
+                clearInterval(intervalId);
+                return;
+            }
+            const point = document.createElement('div');
+            point.className = 'point';
+            const x = Math.random() * square.offsetWidth;
+            const y = Math.random() * square.offsetHeight;
+            const distance = Math.sqrt((x - circle.offsetLeft) ** 2 + (y - circle.offsetTop) ** 2);
+            if (distance < circle.offsetWidth / 2) {
+                point.classList.add('red');
+                inside++;
+            } else {
+                point.classList.add('blue');
+            }
+            total++;
+            updateCounter();
+            point.style.left = `${x}px`;
+            point.style.top = `${y}px`;
+            square.appendChild(point);
+        }
+
+        intervalId = setInterval(createPoint, 1);
+    
+
+    </script>
+</body>
+
+</html>
